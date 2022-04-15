@@ -9,7 +9,7 @@ rule compress:
     input:
         "/home/VCF/{sample}.vcf"
     output:
-        "/home/VCF{sample}.vcf.gz
+        "/home/VCF{sample}.vcf.gz"
     shell:
         "bgzip -c {input} > {output}"
 
