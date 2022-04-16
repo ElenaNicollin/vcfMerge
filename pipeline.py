@@ -4,7 +4,6 @@ import re
 from urllib.request import urlopen, Request
 #import argparse
 
-
 def read(path):
     return open(str(path),'r').readlines()
 
@@ -21,19 +20,6 @@ def download_html(url, path):
         pass
         #login webpage changed
 
-def bgzip(path):
-    for file in glob.glob(path + "*"):
-        if file.split('.')[1] == "vcf":
-            subprocess.call("bgzip",file)
-        else:
-            print("err: ",file)
-
-def bgzip_copy(path):
-    for file in glob.glob(path + "*"):
-        if file.split('.')[1] == "vcf":
-            print("calling:","bgzip -c",file,">",file+".gz")
-            newfile=file+".gz"
-            subprocess.call(["bgzip","-c",file],stdout=open(newfile,"w"))
 
 def wildcard(path, liste):
     dico = {}
@@ -54,8 +40,6 @@ def run_pipeline():
 
     print("File configuration loaded ...")
     download_html("https://snakemake-wrappers.readthedocs.io/en/0.61.0/wrappers/bcftools/merge.html", "/home/Log/merge.html") 
-
-    #bgzip_copy("/home/VCF/")
 
     merging_stderr = "/home/Log/merging.log"   
     merging = subprocess.call(["snakemake","--snakefile","/home/Merge/merge.smk","--cores","2","--use-conda"], stderr=open(merging_stderr,"w"))

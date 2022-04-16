@@ -1,20 +1,22 @@
+import sys
+sys.path.append('/home/Utils/')
 from pipeline import *
 
 rule all:
     input:
-        "/home/VCF/{ID}.gz.csi", ID=wildcard('/home/VCF/', ['.vcf'])[0])
-        "/home/Log/DNA_RNA_merged.vcf"
+        expand("/home/VCF/{ID}.vcf.gz.csi", ID=wildcard('/home/VCF/', ['.vcf'])[0]),
+        "/home/OutputFiles/DNA_RNA_merged.vcf"
 
-rule compress:
+rule bgzip_compress:
     input:
         "/home/VCF/{sample}.vcf"
     output:
-        "/home/VCF{sample}.vcf.gz"
+        "/home/VCF/{sample}.vcf.gz"
     shell:
         "bgzip -c {input} > {output}"
 
 
-rule index:
+rule bcftools_index:
     input:
         "/home/VCF/{sample}.vcf.gz"
     output:
@@ -25,7 +27,7 @@ rule index:
 
 rule bcftools_merge:
     input:
-        calls=["/home/VCF/LMS25R_HaplotypeCaller_filtered.vcf.gz", "/home/VCF/LMS25T.vcf.gz"]
+        calls=expand("/home/VCF/{ID}.vcf.gz", ID=wildcard('/home/VCF/',['.vcf'])[0])
     output:
         "/home/OutputFiles/DNA_RNA_merged.vcf"
     params:
