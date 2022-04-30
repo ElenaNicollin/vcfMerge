@@ -31,15 +31,17 @@ RUN wget \
 
 SHELL [ "/bin/bash", "-c" ]
 
-RUN conda install -c conda-forge mamba && \
-    conda update -n base -c defaults conda && \
-    mamba create -y -c conda-forge -c bioconda -n snakemake snakemake && \
-    conda init bash
+RUN /root/miniconda3/bin/conda install -c conda-forge mamba && \
+    /root/miniconda3/bin/conda update -n base -c defaults conda && \
+    /root/miniconda3/bin/mamba create -y -c conda-forge -c bioconda -n snakemake snakemake && \
+    /root/miniconda3/bin/conda init bash && \
+    /root/miniconda3/envs/snakemake/bin/python -m pip install xlsxwriter openpyxl
 ENV PATH /root/miniconda3/envs/snakemake/bin/:$PATH
 
 WORKDIR /home/
 
-COPY pipeline.py /home/Utils/
+COPY pipeline.py vcf_to_excel.py excel_split.py /home/Utils/
 COPY merge.smk /home/Merge/
+COPY formatting.smk /home/Formatting/
 
 RUN mkdir /home/Log/

@@ -41,9 +41,15 @@ def run_pipeline():
     print("File configuration loaded ...")
     download_html("https://snakemake-wrappers.readthedocs.io/en/0.61.0/wrappers/bcftools/merge.html", "/home/Log/merge.html") 
 
+    print("Merging VCF files...")
     merging_stderr = "/home/Log/merging.log"   
     merging = subprocess.call(["snakemake","--snakefile","/home/Merge/merge.smk","--cores","2","--use-conda"], stderr=open(merging_stderr,"w"))
     check["merging"] = {"code" : merging, "stderr" : merging_stderr}
+
+    print("Sorting into excel files...")
+    formatting_stderr = "/home/Log/formatting.log"
+    formatting = subprocess.call(["snakemake","--snakefile","/home/Formatting/formatting.smk","--cores","2","--use-conda"], stderr=open(formatting_stderr,"w"))
+    check["formatting"] = {"code" : formatting, "stderr" : formatting_stderr}
 
 
 if __name__ == "__main__":
