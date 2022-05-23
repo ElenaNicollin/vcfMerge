@@ -4,7 +4,7 @@ rule all:
         "/home/OutputFiles/Concordant.xlsx",
         "/home/OutputFiles/Discordant.xlsx"
 
-rule to_vcf:
+rule to_excel:
     input:
         "/home/OutputFiles/DNA_RNA_merged.vcf"
     output:
